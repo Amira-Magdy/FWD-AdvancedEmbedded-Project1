@@ -30,9 +30,9 @@ static uint8 Timer_A_B;
 /**********************************************************************************************************************
  *  GLOBAL DATA
  *********************************************************************************************************************/
-static GPT_ChannelConfigSet Gpt_ConfigDynamic[GPT_CHANNLES_CONFIGURED]; 
+static ChannelConfigSetTIMER Gpt_ConfigDynamic[CHANNLES_CONFIGURED_TIMER]; 
 STATIC const GPT_CONFIGURATION * GPT_Channels = NULL_PTR;
-STATIC Gpt_ModeType Gpt_Mode = GPT_MODE_NORMAL;
+STATIC ModeTypeTIMER Gpt_Mode = NORMALMode;
 volatile static uint32 * GPT_Ptr = NULL_PTR;     /* point to the required timer Registers base address */
 
 static const uint32 GPTM_TimersBaseAddresses[GPTM_MAXIMUM_CHANNLES_CONFIGURED] = 
@@ -52,7 +52,7 @@ static const uint32 GPTM_TimersBaseAddresses[GPTM_MAXIMUM_CHANNLES_CONFIGURED] =
 };
 
 /******************************************************************************
-* \Syntax          : void Gpt_Init(const Gpt_ConfigType* ConfigPtr)      
+* \Syntax          : void Initializing_TIMER(const ConfigTypeTIMER* ConfigPtr)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -62,11 +62,11 @@ static const uint32 GPTM_TimersBaseAddresses[GPTM_MAXIMUM_CHANNLES_CONFIGURED] =
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_Init(const GPT_ConfigType* ConfigPtr)
+void Initializing_TIMER(const ConfigTypeTIMER* ConfigPtr)
 {
 	GPT_Channels = ConfigPtr -> Channels;
-    Gpt_Mode = GPT_MODE_NORMAL;
-    for(uint8 i = 0; i < GPT_CHANNLES_CONFIGURED; i++)
+    Gpt_Mode = NORMALMode;
+    for(uint8 i = 0; i < CHANNLES_CONFIGURED_TIMER; i++)
     { 
       Gpt_ConfigDynamic[i].ChannelID = (GPT_Channels + i) -> ChannelID; // store the ID for this channel
 
@@ -84,7 +84,7 @@ void Gpt_Init(const GPT_ConfigType* ConfigPtr)
       {
           CLEAR_BIT(*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMCTL_REG_OFFSET),BIT0); /* Clear the TAEN to disable the timer in the begining of configs */
 
-          if((GPT_Channels) -> TimerMode == GPT_ONE_SHOT) // step 3 in initialization of one shot / periodic mode
+          if((GPT_Channels) -> TimerMode == ONE_SHOTMode) // step 3 in initialization of one shot / periodic mode
           {
             *(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMTAMR_REG_OFFSET) &= 0xFC;
             *(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMTAMR_REG_OFFSET) |= 0x01; // select one shot mode 
@@ -99,7 +99,7 @@ void Gpt_Init(const GPT_ConfigType* ConfigPtr)
       else // TIMER B
       {
           CLEAR_BIT(*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMCTL_REG_OFFSET),BIT8);/* Clear the TBEN to disable the timer in the begining of configs */
-          if((GPT_Channels) -> TimerMode == GPT_ONE_SHOT) // step 3 in initialization of one shot / periodic mode
+          if((GPT_Channels) -> TimerMode == ONE_SHOTMode) // step 3 in initialization of one shot / periodic mode
           {
             *(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMTBMR_REG_OFFSET) &= 0xFC;
             *(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMTBMR_REG_OFFSET) |= 0x01; // select one shot mode 
@@ -116,7 +116,7 @@ void Gpt_Init(const GPT_ConfigType* ConfigPtr)
 
 }
 /******************************************************************************
-* \Syntax          : void Gpt_EnableNotification(Gpt_ChannelType Channel)      
+* \Syntax          : void EnablingNotification_TIMER(Gpt_ChannelType Channel)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -126,7 +126,7 @@ void Gpt_Init(const GPT_ConfigType* ConfigPtr)
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_EnableNotification(Gpt_ChannelType Channel)
+void EnablingNotification_TIMER(ChannelTypeTIMER Channel)
 {
    if(Channel/TIMER_COUNT)
    {
@@ -148,7 +148,7 @@ void Gpt_EnableNotification(Gpt_ChannelType Channel)
    SET_BIT(*(volatile uint32 *)((volatile uint8 *)BaseAddress + GPT_GPTMIMR_REG_OFFSET),BIT16);
 }
 /******************************************************************************
-* \Syntax          : void Gpt_DisbaleNotification(Gpt_ChannelType Channel)      
+* \Syntax          : void DisbalingNotification_TIMER(Gpt_ChannelType Channel)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -158,7 +158,7 @@ void Gpt_EnableNotification(Gpt_ChannelType Channel)
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_DisbaleNotification(Gpt_ChannelType Channel) 
+void DisbalingNotification_TIMER(ChannelTypeTIMER Channel) 
 {
     if(Channel/TIMER_COUNT)
    {
@@ -181,7 +181,7 @@ void Gpt_DisbaleNotification(Gpt_ChannelType Channel)
 }
 
 /******************************************************************************
-* \Syntax          : void Gpt_StartTimer(Gpt_ChannelType Channel,Gpt_ValueType Value)      
+* \Syntax          : void STARTINGTimer(Gpt_ChannelType Channel,ValueTypeTIMER Value)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -191,7 +191,7 @@ void Gpt_DisbaleNotification(Gpt_ChannelType Channel)
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_StartTimer(Gpt_ChannelType Channel,Gpt_ValueType Value)
+void STARTINGTimer(ChannelTypeTIMER Channel,ValueTypeTIMER Value)
 {
     uint8 temp = Channel / 2; // convert timers number from 0->24 to 0->12 to point on the base address 12 registers
   if(temp >= 0 && temp <= 7)
@@ -219,7 +219,7 @@ void Gpt_StartTimer(Gpt_ChannelType Channel,Gpt_ValueType Value)
   }
 }	
 /******************************************************************************
-* \Syntax          : void Gpt_StopTimer(Gpt_ChannelType Channel)      
+* \Syntax          : void STOPINGTimer(Gpt_ChannelType Channel)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -229,7 +229,7 @@ void Gpt_StartTimer(Gpt_ChannelType Channel,Gpt_ValueType Value)
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_StopTimer(Gpt_ChannelType Channel)
+void STOPINGTimer(ChannelTypeTIMER Channel)
 {
     if(Channel/TIMER_COUNT)
    {
@@ -256,7 +256,7 @@ void Gpt_StopTimer(Gpt_ChannelType Channel)
 }
 
 /******************************************************************************
-* \Syntax          : void Gpt_ClearFlag(Gpt_ChannelType Channel)      
+* \Syntax          : void CLEARING_FlagTimer(Gpt_ChannelType Channel)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -266,7 +266,7 @@ void Gpt_StopTimer(Gpt_ChannelType Channel)
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_ClearFlag(Gpt_ChannelType Channel)
+void CLEARING_FlagTimer(ChannelTypeTIMER Channel)
 {
 	BaseAddress = GPTM_TimersBaseAddresses[Channel];
 	

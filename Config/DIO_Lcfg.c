@@ -14,8 +14,6 @@
 const Dio_ConfigType Dio_Configuration = 
 {
     DIO_LED1_PORT_NUM,DIO_LED1_CHANNEL_NUM,
-	  DIO_LED2_PORT_NUM,DIO_LED2_CHANNEL_NUM,
-    DIO_LED3_PORT_NUM,DIO_LED3_CHANNEL_NUM
 };
 
 /**********************************************************************************************************************

@@ -9,7 +9,7 @@
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
  /* Number of the configured GPT Channels */
-#define GPT_CHANNLES_CONFIGURED                  (3U)
+#define CHANNLES_CONFIGURED_TIMER                  (3U)
 
  
 #endif  /* GPT_CFG_H */

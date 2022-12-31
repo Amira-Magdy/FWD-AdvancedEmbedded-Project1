@@ -45,30 +45,30 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
-/* Type definition for GPT_ChannelType used by the GPT APIs */
-typedef uint8 Gpt_ChannelType;
+/* Type definition for ChannelTypeTIMER used by the GPT APIs */
+typedef uint8 ChannelTypeTIMER;
 
-/* Type definition for Gpt_ValueType used by the GPT APIs */
-typedef uint32 Gpt_ValueType;
+/* Type definition for ValueTypeTIMER used by the GPT APIs */
+typedef uint32 ValueTypeTIMER;
 
-/* Type definition for Gpt_ModeType used by the GPT APIs */
+/* Type definition for ModeTypeTIMER used by the GPT APIs */
 typedef enum
 {
-  GPT_MODE_NORMAL, GPT_MODE_SLEEP
-} Gpt_ModeType;
+  NORMALMode, SLEEPMode
+} ModeTypeTIMER;
 
 typedef enum
 {
     // GPT_PREDEF_TIMER_100US_32BIT=1,
-    GPT_PREDEF_TIMER_1US_16BIT = 4,
-    GPT_PREDEF_TIMER_1US_24BIT = 4,
-    GPT_PREDEF_TIMER_1US_32BIT = 0
-} Gpt_PredefTimerType;
+    TIMER_1US_16BIT = 4,
+    TIMER_1US_24BIT = 4,
+    TIMER_1US_32BIT = 0
+} PredefTimerType;
 
 typedef enum
 {
-  GPT_ONE_SHOT = 1, GPT_CONTINUOUS // Periodic//
-} Gpt_RunningMode;
+  ONE_SHOTMode = 1, CONTINUOUSMode // Periodic//
+} RunningMode;
 
 typedef enum
 {
@@ -84,41 +84,41 @@ typedef enum
     TIMER3_A_WIDE, TIMER3_B_WIDE,   
     TIMER4_A_WIDE, TIMER4_B_WIDE, 
     TIMER5_A_WIDE, TIMER5_B_WIDE   
-} GPT_ChannelNum;
+} ChannelNum;
 
 typedef struct 
 {
-   GPT_ChannelNum ChannelID;
-  Gpt_RunningMode TimerMode;
+   ChannelNum ChannelID;
+  RunningMode TimerMode;
 }GPT_CONFIGURATION;
 
 typedef struct 
 {
-  GPT_ChannelNum ChannelID;
-  Gpt_RunningMode TimerMode;
-  Gpt_ValueType Max_Ticks;
+  ChannelNum ChannelID;
+  RunningMode TimerMode;
+  ValueTypeTIMER Max_Ticks;
   boolean Gpt_DirtyBitWakeup;
   boolean Gpt_DirtyBitNotification;
-}GPT_ChannelConfigSet;
+}ChannelConfigSetTIMER;
 
 /* Structure required for initializing the GPT Driver */
 typedef struct 
 {
-	GPT_ChannelConfigSet Channels[GPT_CHANNLES_CONFIGURED];
-} GPT_ConfigType;
+	ChannelConfigSetTIMER Channels[CHANNLES_CONFIGURED_TIMER];
+} ConfigTypeTIMER;
 
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
-extern const GPT_ConfigType  Gpt_Configuration;
+extern const ConfigTypeTIMER  Gpt_Configuration;
  
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
 
 /******************************************************************************
-* \Syntax          : void Gpt_Init(const Gpt_ConfigType* ConfigPtr)      
+* \Syntax          : void Initializing_TIMER(const ConfigTypeTIMER* ConfigPtr)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -128,10 +128,10 @@ extern const GPT_ConfigType  Gpt_Configuration;
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_Init(const GPT_ConfigType* ConfigPtr);
+void Initializing_TIMER(const ConfigTypeTIMER* ConfigPtr);
 
 /******************************************************************************
-* \Syntax          : void Gpt_EnableNotification(Gpt_ChannelType Channel)      
+* \Syntax          : void EnablingNotification_TIMER(ChannelTypeTIMER Channel)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -141,10 +141,10 @@ void Gpt_Init(const GPT_ConfigType* ConfigPtr);
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_EnableNotification(Gpt_ChannelType Channel);
+void EnablingNotification_TIMER(ChannelTypeTIMER Channel);
 
 /******************************************************************************
-* \Syntax          : void Gpt_DisbaleNotification(Gpt_ChannelType Channel)      
+* \Syntax          : void DisbalingNotification_TIMER(ChannelTypeTIMER Channel)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -154,10 +154,10 @@ void Gpt_EnableNotification(Gpt_ChannelType Channel);
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_DisbaleNotification(Gpt_ChannelType Channel);
+void DisbalingNotification_TIMER(ChannelTypeTIMER Channel);
 
 /******************************************************************************
-* \Syntax          : void Gpt_StartTimer(Gpt_ChannelType Channel,Gpt_ValueType Value)      
+* \Syntax          : void STARTINGTimer(ChannelTypeTIMER Channel,ValueTypeTIMER Value)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -167,10 +167,10 @@ void Gpt_DisbaleNotification(Gpt_ChannelType Channel);
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_StartTimer(Gpt_ChannelType Channel,Gpt_ValueType Value);
+void STARTINGTimer(ChannelTypeTIMER Channel,ValueTypeTIMER Value);
 
 /******************************************************************************
-* \Syntax          : void Gpt_StopTimer(Gpt_ChannelType Channel)      
+* \Syntax          : void STOPINGTimer(ChannelTypeTIMER Channel)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -180,10 +180,10 @@ void Gpt_StartTimer(Gpt_ChannelType Channel,Gpt_ValueType Value);
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_StopTimer(Gpt_ChannelType Channel);
+void STOPINGTimer(ChannelTypeTIMER Channel);
 
 /******************************************************************************
-* \Syntax          : void Gpt_ClearFlag(Gpt_ChannelType Channel)      
+* \Syntax          : void CLEARING_FlagTimer(ChannelTypeTIMER Channel)      
 * \Description     : Describe this service                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
@@ -193,7 +193,7 @@ void Gpt_StopTimer(Gpt_ChannelType Channel);
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Gpt_ClearFlag(Gpt_ChannelType Channel);
+void CLEARING_FlagTimer(ChannelTypeTIMER Channel);
  
 #endif  /* GPT_H */
 
